@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Графический дизайн и ИИ — айдентика под ключ</title>
+<style>
+  :root{
+    --bg1:#0f0c29;
+    --bg2:#302b63;
+    --bg3:#24243e;
+    --accent1:#a855f7;
+    --accent2:#ec4899;
+    --accent3:#6366f1;
+    --text:#f1f1f8;
+    --muted:#b8b3cc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2) 50%,var(--bg3));
+    background-attachment:fixed;
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+    line-height:1.5;
+  }
+  .bg-glow{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(168,85,247,0.25), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(236,72,153,0.2), transparent 40%),
+      radial-gradient(circle at 50% 80%, rgba(99,102,241,0.25), transparent 45%);
+    pointer-events:none;
+  }
+  .container{
+    max-width:960px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  header{
+    padding:80px 0 50px;
+  }
+  .hero{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:56px;
+    text-align:left;
+  }
+  .hero-text{
+    text-align:left;
+    max-width:560px;
+  }
+  .hero-photo{
+    flex-shrink:0;
+    position:relative;
+    width:340px;
+    animation:float 5s ease-in-out infinite;
+  }
+  .hero-photo::before{
+    content:"";
+    position:absolute;
+    top:10%;
+    left:10%;
+    width:80%;
+    height:80%;
+    background:radial-gradient(circle, rgba(168,85,247,0.45), rgba(236,72,153,0.25) 45%, transparent 70%);
+    filter:blur(40px);
+    z-index:-1;
+  }
+  .hero-photo img{
+    width:100%;
+    height:auto;
+    display:block;
+    filter:drop-shadow(0 25px 40px rgba(0,0,0,0.5));
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+  }
+  .badge{
+    display:inline-block;
+    padding:6px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:24px;
+    letter-spacing:.3px;
+  }
+  h1{
+    font-size:clamp(32px,6vw,56px);
+    font-weight:800;
+    line-height:1.15;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2) 50%,var(--accent3));
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:shine 6s linear infinite;
+    margin-bottom:20px;
+  }
+  @keyframes shine{
+    to{background-position:200% center;}
+  }
+  header p.lead{
+    font-size:clamp(16px,2.5vw,20px);
+    color:var(--muted);
+    max-width:620px;
+    margin:0;
+  }
+  @media (max-width:768px){
+    .hero{
+      flex-direction:column;
+      text-align:center;
+    }
+    .hero-text{
+      text-align:center;
+    }
+    .hero-photo{
+      width:220px;
+    }
+  }
+  section{
+    padding:50px 0;
+  }
+  h2{
+    font-size:clamp(24px,4vw,32px);
+    text-align:center;
+    margin-bottom:12px;
+  }
+  .section-sub{
+    text-align:center;
+    color:var(--muted);
+    max-width:620px;
+    margin:0 auto 40px;
+    font-size:16px;
+  }
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:20px;
+    padding:32px 24px;
+    backdrop-filter:blur(10px);
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    border-color:rgba(168,85,247,0.5);
+    box-shadow:0 12px 30px rgba(168,85,247,0.15);
+  }
+  .icon-wrap{
+    width:56px;
+    height:56px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,var(--accent1),var(--accent3));
+    margin-bottom:20px;
+  }
+  .icon-wrap svg{
+    width:28px;
+    height:28px;
+    stroke:#fff;
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  .card h3{
+    font-size:19px;
+    margin-bottom:10px;
+  }
+  .card p{
+    color:var(--muted);
+    font-size:15px;
+  }
+  .audience{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:24px;
+    padding:40px;
+  }
+  .audience-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:32px;
+    margin-top:24px;
+  }
+  .audience h3{
+    font-size:18px;
+    margin-bottom:14px;
+    color:#fff;
+  }
+  .audience ul{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .audience li{
+    color:var(--muted);
+    font-size:15px;
+    padding-left:26px;
+    position:relative;
+  }
+  .audience li::before{
+    content:"✓";
+    position:absolute;
+    left:0;
+    color:var(--accent1);
+    font-weight:700;
+  }
+  .cta-section{
+    text-align:center;
+    padding:70px 0 90px;
+  }
+  .cta-section h2{
+    margin-bottom:14px;
+  }
+  .cta-section .section-sub{
+    margin-bottom:36px;
+  }
+  .cta-btn{
+    display:inline-block;
+    padding:18px 44px;
+    font-size:18px;
+    font-weight:700;
+    color:#fff;
+    text-decoration:none;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    box-shadow:0 0 0 0 rgba(236,72,153,0.6);
+    animation:pulse 2.2s infinite;
+    transition:transform .2s ease;
+  }
+  .cta-btn:hover{
+    transform:scale(1.05);
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(236,72,153,0.55);}
+    70%{box-shadow:0 0 0 18px rgba(236,72,153,0);}
+    100%{box-shadow:0 0 0 0 rgba(236,72,153,0);}
+  }
+  .tg-link{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-top:22px;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:15px;
+    transition:color .2s ease;
+  }
+  .tg-link:hover{
+    color:#fff;
+  }
+  .tg-link svg{
+    width:20px;
+    height:20px;
+    fill:#29a9eb;
+  }
+  footer{
+    text-align:center;
+    padding:30px 0 40px;
+    color:var(--muted);
+    font-size:13px;
+    border-top:1px solid rgba(255,255,255,0.08);
+  }
+  @media (max-width:768px){
+    header{padding:60px 0 30px;}
+    .cards{grid-template-columns:1fr;}
+    .audience-grid{grid-template-columns:1fr;}
+    .audience{padding:28px 20px;}
+    section{padding:36px 0;}
+  }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<header>
+  <div class="container">
+    <div class="hero">
+      <div class="hero-text">
+        <span class="badge">Дизайн + ИИ</span>
+        <h1>Услуги графического дизайнера<br>и работа с ИИ</h1>
+        <p class="lead">Графический дизайн, айдентика под ключ — от логотипа до целостного фирменного стиля, усиленного возможностями искусственного интеллекта.</p>
+      </div>
+      <div class="hero-photo">
+        <img src="img/designer-photo-cutout.png" alt="Дизайнер">
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="advantages">
+  <div class="container">
+    <h2>Три сильных преимущества</h2>
+    <p class="section-sub">Не просто картинки — продуманная система, которая работает на ваш бизнес.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+        </div>
+        <h3>Разработка айдентики</h3>
+        <p>Помощь в создании логотипа, цветовой палитры, типографики и гайдлайнов — единый узнаваемый стиль для всех точек контакта с клиентом.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        </div>
+        <h3>Анализ конкурентов с ИИ</h3>
+        <p>ИИ-инструменты помогают быстро проанализировать визуальные стратегии конкурентов и найти свободную нишу для вашего бренда.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.6L22 10l-5.5 4.4L18 22l-6-3.6L6 22l1.5-7.6L2 10l7.4-1.4L12 2z"/></svg>
+        </div>
+        <h3>Выявление сильных сторон</h3>
+        <p>С помощью ИИ-анализа находим уникальные преимущества заказчика и превращаем их в основу визуальной коммуникации бренда.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="audience">
+  <div class="container">
+    <div class="audience">
+      <h2>Для кого это подходит</h2>
+      <p class="section-sub">Особенно ценно для предпринимателей и самозанятых, которые строят личный бренд.</p>
+
+      <div class="audience-grid">
+        <div>
+          <h3>Кому подойдёт</h3>
+          <ul>
+            <li>Предпринимателям, запускающим новый проект</li>
+            <li>Самозанятым специалистам и фрилансерам</li>
+            <li>Экспертам, которые строят личный бренд</li>
+            <li>Малому бизнесу без штатного дизайнера</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Почему это выгодно</h3>
+          <ul>
+            <li>Узнаваемый стиль выделяет среди конкурентов</li>
+            <li>Единая айдентика повышает доверие клиентов</li>
+            <li>ИИ-анализ ускоряет и удешевляет процесс</li>
+            <li>Инвестиция в бренд окупается ростом продаж</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2>Готовы получить свой стиль?</h2>
+    <p class="section-sub">Познакомьтесь с дизайнером и обсудите ваш проект — первый шаг к запоминающемуся бренду.</p>
+    <a href="https://t.me/nadjat_29" target="_blank" rel="noopener" class="cta-btn">Познакомиться с дизайнером</a>
+    <br>
+    <a href="https://t.me/nadjat_29" target="_blank" rel="noopener" class="tg-link">
+      <svg viewBox="0 0 24 24"><path d="M9.036 15.803L8.7 20.28c.47 0 .674-.203.92-.446l2.21-2.12 4.58 3.35c.84.463 1.44.22 1.66-.78l3.01-14.13h.001c.26-1.22-.44-1.7-1.26-1.4L2.4 9.63c-1.2.47-1.18 1.14-.2 1.44l4.6 1.44L17.2 6.1c.48-.32.92-.14.56.18"/></svg>
+      t.me/nadjat_29
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Графический дизайн и айдентика под ключ · 2026
+  </div>
+</footer>
+
+</body>
+</html>
